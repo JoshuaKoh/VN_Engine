@@ -6,12 +6,7 @@ import json
 import datetime
 from time import sleep
 
-'''
-TODO
-- Implement options screen
-Mute music
-Resolutions
-'''
+
 
 pygame.init()
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
