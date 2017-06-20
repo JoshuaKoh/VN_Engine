@@ -1,0 +1,7 @@
+title: Bladefury Invitational
+menu song: theme
+menu image: title_bg
+
+credits:
+Written by Joshua Koh
+Music by people :D

@@ -1,0 +1,37 @@
+background: c1_bar
+music: c1_bar
+
+: Three college dudes approached one of the most popular sports bars in the city of Aselia.
+: They pushed their way through the dense crowd gathered in front and squeezed through the door.
+: It was loud.
+: The restaurant itself was ferociously busy, but they weren’t concerned as they finally made it inside. 
+: They forced their way to their reserved table, located within earshot of one of the television screens blaring coverage of the most significant event of the year. 
+: They said nothing to each other, as if they had any chance of being heard over the noise, and instead paid full attention to the sound from the screen.
+
+transition: fadetoandfrom white 3
+
+background: c1_bar
+Anchor: …so now we’ll hand it off to our casters as the players get ready to take to the arena.
+: The scene shifted from a television studio filled with game analysts in suits to a booth overlooking a large arena of cliffs and waterfalls.
+: Two smartly dressed casters with slicked back hair, instantly recognizable as the legendary Kobe and Sprint, were standing, smiling, and ready to present.
+music: c1_casters
+Kobe: Good afternoon everyone and thanks for joining us on Opening Day of the Bladefury Invitational! I’m Kobe Archer here with my good friend Sprint Bisland, bringing you all the action that these incredible teams will be displaying for us today.
+Sprint: That’s right Kobe. The four best squads from around the world coming together to battle it out… there’s sure to be some sparks flying.
+Kobe: And what a lineup of teams it is. You’ve got to appreciate the crazy stories that brought some of these squads together!
+Archer: Sure. Just take a look at Reggie and his boys. A family name by now, and the crowd favorite. 
+Archer: They’ve stuck with the same squad since what seems like forever, and they’ve made it to the Invitational four years running. 
+Archer: You can bet that they’re some of the most experienced guys out there, and they’ll be hungry for a second tournament win to add to their trophy case after placing second two years ago and then dropping the ball completely last year.
+Kobe: Speaking of that, their opponents who beat them last year are here too, at least in part. After taking first, the squad split on good terms, with three of their members retiring to rest on their laurels. 
+Kobe: As for the other two, Alex and Soren, you’ve got be in love with their story. 
+Kobe: Leaving the region to find three foreign rookies, bringing them on and training them up over the past season. 
+Kobe: They started off slow, but once they started gelling as a team, they’ve proven to be a very formidable and completely unpredictable squad, bringing us some of the strangest strategies and most entertaining games we’ve seen in a long time.
+Archer: Only time will tell if their they can prove themselves in the high-pressure frying pan of tournament play...
+music: OFF
+:...
+background: white
+:...
+background: c1_forest
+music: theme
+Steffan: …at least, that’s what I imagine is happening. 
+Steffan: There was no way I can actually say what was happening, since I'm already on my way into the arena.
+Steffan: My four teammates and best friends are by my side.
