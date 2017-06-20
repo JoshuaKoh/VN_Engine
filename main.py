@@ -1,11 +1,14 @@
 import pygame
 import os
-from my_lib import *
 import sys
 import json
 import datetime
 from time import sleep
 
+# Import all supporting files
+from my_lib import *
+from transitions import *
+from options import *
 
 
 pygame.init()
@@ -13,6 +16,7 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.mixer.init()
 
 clock = pygame.time.Clock()
+
 
 # PROGRAM VARS
 layout = "TITLE" # Which screen is the user viewing?
@@ -39,148 +43,11 @@ line = ""
 lineIndex = 1
 contentIndex = 0
 doIncrementContentIndex = False
-inTransition = False # Is the user viewing a transition?
-transitionBg = None # What is the user view while in a transition?
+
 
 # ERROR VARS
 isErrorMusicPlaying = False
 
-# TRANSITIONS
-# fadeto colors: black, white, red
-def transition_fadeto(fadeColor = "BLACK"):
-    global transitionBg
-    fadeColor = fadeColor.upper()
-    color = None
-    if fadeColor == "BLACK":
-        color = [0, 0, 0, 0]
-        transitionBg = (0, 0, 0)
-    elif fadeColor == "RED":
-        color = [255, 0, 0, 0]
-        transitionBg = (255, 0, 0)
-    elif fadeColor == "WHITE":
-        color = [255, 255, 255, 0]
-        transitionBg = (255, 255, 255)
-    else:
-        # In the case the transition is broken, inTransition needs to be turned off again
-        global inTransition
-        inTransition = False
-        return
-
-    for i in range(8):
-        # Prep fade color
-        color[3] = (32 * (i + 1)) - 1
-        textbox = pygame.Surface((WIDTH, HEIGHT), pygame.SRCALPHA)
-        textbox.fill(color)
-
-        # Prep text box
-        textbox = pygame.Surface((WIDTH, HEIGHT//2 - (HEIGHT//2)//6 - TEXT_BOX_GUTTER), pygame.SRCALPHA)
-        textbox.fill(C_TEXT_BOX)
-
-        # Blit all 3
-        screen.blit(get_image(currentBgPath), (0, 0))
-        screen.blit(textbox, (0, HEIGHT//2 + (HEIGHT//2)//6))
-        screen.blit(textbox, (0, 0))
-
-        pygame.display.flip()
-        clock.tick(FPS)
-        sleep(0.1) # Make transition slower
-
-# fadefrom colors: black, white, red
-def transition_fadefrom(fadeColor = "BLACK"):
-    global transitionBg
-    fadeColor = fadeColor.upper()
-    color = None
-    if fadeColor == "BLACK":
-        color = [0, 0, 0, 0]
-        transitionBg = (0, 0, 0)
-    elif fadeColor == "RED":
-        color = [255, 0, 0, 0]
-        transitionBg = (255, 0, 0)
-    elif fadeColor == "WHITE":
-        color = [255, 255, 255, 0]
-        transitionBg = (255, 255, 255)
-    else:
-        return
-
-    for i in range(8):
-        # Prep fade color
-        color[3] = 256 - ((32 * (i + 1)) - 1)
-        textbox = pygame.Surface((WIDTH, HEIGHT), pygame.SRCALPHA)
-        textbox.fill(color)
-
-        # Prep text box
-        textbox = pygame.Surface((WIDTH, HEIGHT//2 - (HEIGHT//2)//6 - TEXT_BOX_GUTTER), pygame.SRCALPHA)
-        textbox.fill(C_TEXT_BOX)
-
-        # Blit all 3
-        screen.blit(get_image(currentBgPath), (0, 0))
-        screen.blit(textbox, (0, HEIGHT//2 + (HEIGHT//2)//6))
-        screen.blit(textbox, (0, 0))
-        
-        pygame.display.flip()
-        clock.tick(FPS)
-        sleep(0.1) # Make transition slower
-
-# fadefrom colors: black, white, red
-def transition_fadetoandfrom(fadeColor = "BLACK", timeInColor = 0.1):
-    global transitionBg
-    fadeColor = fadeColor.upper()
-    color = None
-
-    if fadeColor == "BLACK":
-        color = [0, 0, 0, 0]
-        transitionBg = (0, 0, 0)
-    elif fadeColor == "RED":
-        color = [255, 0, 0, 0]
-        transitionBg = (255, 0, 0)
-    elif fadeColor == "WHITE":
-        color = [255, 255, 255, 0]
-        transitionBg = (255, 255, 255)
-    else:
-        return
-
-    # Fade out!
-    for i in range(8):
-        # Prep fade color
-        color[3] = (32 * (i + 1)) - 1
-        textbox = pygame.Surface((WIDTH, HEIGHT), pygame.SRCALPHA)
-        textbox.fill(color)
-
-        # Prep text box
-        textbox = pygame.Surface((WIDTH, HEIGHT//2 - (HEIGHT//2)//6 - TEXT_BOX_GUTTER), pygame.SRCALPHA)
-        textbox.fill(C_TEXT_BOX)
-
-        # Blit all 3
-        screen.blit(get_image(currentBgPath), (0, 0))
-        screen.blit(textbox, (0, HEIGHT//2 + (HEIGHT//2)//6))
-        screen.blit(textbox, (0, 0))
-
-        pygame.display.flip()
-        clock.tick(FPS)
-        sleep(0.1) # Make transition slower
-
-    # Wait for some time in color
-    sleep(float(timeInColor))
-
-    # Fade in!
-    for i in range(8):
-        # Prep fade color
-        color[3] = 256 - ((32 * (i + 1)) - 1)
-        textbox = pygame.Surface((WIDTH, HEIGHT), pygame.SRCALPHA)
-        textbox.fill(color)
-
-        # Prep text box
-        textbox = pygame.Surface((WIDTH, HEIGHT//2 - (HEIGHT//2)//6 - TEXT_BOX_GUTTER), pygame.SRCALPHA)
-        textbox.fill(C_TEXT_BOX)
-
-        # Blit all 3
-        screen.blit(get_image(currentBgPath), (0, 0))
-        screen.blit(textbox, (0, HEIGHT//2 + (HEIGHT//2)//6))
-        screen.blit(textbox, (0, 0))
-        
-        pygame.display.flip()
-        clock.tick(FPS)
-        sleep(0.1) # Make transition slower
 
 # Get data for title and credits screens from cover.txt
 with open("cover.txt") as cover:
@@ -201,6 +68,7 @@ with open("cover.txt") as cover:
             isCredits = True
 
 while doGameLoop:
+
     pygame.display.flip()
     clock.tick(FPS)
 
@@ -387,23 +255,23 @@ while doGameLoop:
                         if temp[0] == "fadeto":
                             inTransition = True # This needs to be run before calling the transition function
                             if len(temp) == 1: # If no color listed, use default black
-                                transition_fadeto()
+                                transition_fadeto(screen, clock)
                             else: # If color is given, use that color
-                                transition_fadeto(temp[1])
+                                transition_fadeto(screen, clock, temp[1])
                         elif temp[0] == "fadefrom":
                             # inTransition not called because user immediately moves to content when exiting transition
                             if len(temp) == 1: # If no color listed, use default black
-                                transition_fadefrom()
+                                transition_fadefrom(screen, clock)
                             else: # If color is given, use that color
-                                transition_fadefrom(temp[1])
+                                transition_fadefrom(screen, clock, temp[1])
                         elif temp[0] == "fadetoandfrom":
                             # inTransition not called because user immediately moves to content when exiting transition
                             if len(temp) == 1: # If no color listed, use default black
-                                transition_fadetoandfrom()
+                                transition_fadetoandfrom(screen, clock)
                             elif len(temp) == 2: # If color (and no time) is given, use that color
-                                transition_fadetoandfrom(temp[1])
+                                transition_fadetoandfrom(screen, clock, temp[1])
                             else: # If color and time are given, use those
-                                transition_fadetoandfrom(temp[1], temp[2])
+                                transition_fadetoandfrom(screen, clock, temp[1], temp[2])
                     line = f.readline()
                     lineIndex+=1
             else: # Some thigns always happen

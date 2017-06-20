@@ -1,7 +1,7 @@
 ## Known bugs
 - Music doesn't update when save is loaded.
 - Game doesn't work on MacOS 10.11 (El Capitan) thanks to bad pygame.
-
+- Enter key does not advance screen in some (all?) cases.
 
 ## TODO
 
@@ -55,3 +55,11 @@
 9. Update saving.
 - Copy files?
 - Multiple saves?
+
+
+10. Implement mouse controls.
+
+
+11. Implement pause screen.
+- Music stops when paused.
+- Option to save, access options, quit.
