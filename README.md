@@ -1,3 +1,10 @@
+## To run the VN Engine
+1. Install the following
+- python 2
+- pygame 1.9
+2. Run `python main.py`
+- Control the game with arrow keys, spacebar, and Esc key.
+
 ## Known bugs
 - Music doesn't update when save is loaded.
 - Game doesn't work on MacOS 10.11 (El Capitan) thanks to bad pygame.
