@@ -1,12 +1,9 @@
 import os
 import pygame
+from options import *
 
-
-WIDTH = 1280 # How wide is the game window?
-HEIGHT = 720 # How tall is the game window?
-FPS = 30
-
-DEFAULT_FONT = "Palatino"
+global o
+o = Options()
 
 # TITLE VARS
 ELEMENT_SPACING = 60
@@ -31,6 +28,7 @@ C_FONT = (255, 255, 255)
 # CREDITS VARS
 CREDIT_FONT_SIZE = 48
 
+
 # COLORS
 C_WHITE = [255, 255, 255]
 C_RED = [255, 0, 0]
@@ -44,7 +42,7 @@ C_HOT_PINK = (255,51,153)
 # LIBRARIES
 # Source: http://www.nerdparadise.com/tech/python/pygame/basics/
 _image_library = {}
-def get_image(path, img_w = WIDTH, img_h = HEIGHT):
+def get_image(path, img_w = o.WIDTH, img_h = o.HEIGHT):
     global _image_library
     image = _image_library.get(path)
     if image == None:
@@ -148,12 +146,12 @@ def print_text(text, size = TEXT_FONT_SIZE, color = C_BLACK, bold = False):
 def center_coords(shape, override_w = -1, override_h = -1):
     if override_w == -1:
         if override_h == -1: # Both w and h are default, get full center
-            return (WIDTH // 2 - shape.get_width() // 2, HEIGHT // 2 - shape.get_height() // 2)
+            return (o.WIDTH // 2 - shape.get_width() // 2, o.HEIGHT // 2 - shape.get_height() // 2)
         else: # width is default, height is not
-            return (WIDTH // 2 - shape.get_width() // 2, override_h)
+            return (o.WIDTH // 2 - shape.get_width() // 2, override_h)
     else:
         if override_h == -1: # height is default, width is not
-            return (override_w, HEIGHT // 2 - shape.get_height() // 2)
+            return (override_w, o.HEIGHT // 2 - shape.get_height() // 2)
         else: # Both w and h are overriden, why are you using this function?
             return (override_w, override_h)
 
@@ -167,7 +165,7 @@ def wrap_text(text):
 
         # determine maximum width of line
         # HARDCODED WRAP LENGTH HERE...v
-        while font.size(text[:i])[0] < WIDTH-TEXT_MARGIN*2 and i < len(text):
+        while font.size(text[:i])[0] < o.WIDTH-TEXT_MARGIN*2 and i < len(text):
             i += 1
 
         # if we've wrapped the text, then adjust the wrap to the last word
