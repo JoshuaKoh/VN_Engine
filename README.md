@@ -4,6 +4,9 @@
 - Enter key does not advance screen in some (all?) cases.
 
 ## TODO
+0. Build comprehensive test suite
+- Make sure all current features are working, as a test workflow for future updates
+
 
 1. Implement options screen
 - Mute music
