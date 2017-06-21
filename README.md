@@ -2,6 +2,8 @@
 - Music doesn't update when save is loaded.
 - Game doesn't work on MacOS 10.11 (El Capitan) thanks to bad pygame.
 - Enter key does not advance screen in some (all?) cases.
+- Images not converting
+- Fade to and from transition is broken
 
 ## TODO
 0. Build comprehensive test suite
