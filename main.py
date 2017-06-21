@@ -8,11 +8,9 @@ from time import sleep
 # Import all supporting files
 from my_lib import *
 from transitions import *
-from options import *
-
 
 pygame.init()
-screen = pygame.display.set_mode((WIDTH, HEIGHT))
+screen = pygame.display.set_mode((o.WIDTH, o.HEIGHT))
 pygame.mixer.init()
 
 clock = pygame.time.Clock()
@@ -59,18 +57,18 @@ with open("cover.txt") as cover:
         elif cover_line[:5] == "title":
             cover_title = cover_line[6:].strip()
         elif cover_line[:9] == "menu song":
-            currentMusicPath = "resources/music/%s.mp3" % cover_line[10:].strip()
-            titleMusicPath = currentMusicPath
+            o.currentMusicPath = "resources/music/%s.mp3" % cover_line[10:].strip()
+            titleMusicPath = o.currentMusicPath
         elif cover_line[:10] == "menu image":
-            currentBgPath = "resources/bg/%s.png" % cover_line[11:].strip()
-            titleBgPath = currentBgPath
+            o.currentBgPath = "resources/bg/%s.png" % cover_line[11:].strip()
+            titleBgPath = o.currentBgPath
         elif cover_line[:7] == "credits":
             isCredits = True
 
 while doGameLoop:
 
     pygame.display.flip()
-    clock.tick(FPS)
+    clock.tick(o.FPS)
 
     if (layout is "TITLE"):
         for event in pygame.event.get():
@@ -135,14 +133,14 @@ while doGameLoop:
         # Set background
         screen.blit(get_image(titleBgPath), (0, 000))
 
-        textbox = pygame.Surface((WIDTH//2, ELEMENT_SPACING*5), pygame.SRCALPHA)
+        textbox = pygame.Surface((o.WIDTH//2, ELEMENT_SPACING*5), pygame.SRCALPHA)
         textbox.fill(C_TITLE_BOX)
-        screen.blit(textbox, (WIDTH//4, HEIGHT//2))
+        screen.blit(textbox, (o.WIDTH//4, o.HEIGHT//2))
 
         # Draw selector
-        selectorbox = pygame.Surface((WIDTH//2, ELEMENT_SPACING), pygame.SRCALPHA)
+        selectorbox = pygame.Surface((o.WIDTH//2, ELEMENT_SPACING), pygame.SRCALPHA)
         selectorbox.fill(C_SELECTOR_BOX)
-        screen.blit(selectorbox, (WIDTH//4, HEIGHT//2 + ELEMENT_SPACING * titleSelected))
+        screen.blit(selectorbox, (o.WIDTH//4, o.HEIGHT//2 + ELEMENT_SPACING * titleSelected))
 
         # Draw text
         title_txt = create_bold_text(cover_title, ELEMENT_FONT_SIZE * 3, C_DARK_RED)
@@ -154,12 +152,12 @@ while doGameLoop:
         options_button = create_bold_text("Options", ELEMENT_FONT_SIZE, C_WHITE)
         credits_button = create_bold_text("Credits", ELEMENT_FONT_SIZE, C_WHITE)
         exit_button = create_bold_text("Exit", ELEMENT_FONT_SIZE, C_WHITE)
-        screen.blit(title_txt, center_coords(title_txt, -1, HEIGHT//5))
-        screen.blit(play_button, center_coords(play_button, -1, HEIGHT//2))
-        screen.blit(continue_button, center_coords(continue_button, -1, HEIGHT//2 + ELEMENT_SPACING))
-        screen.blit(options_button, center_coords(options_button, -1, HEIGHT//2 + ELEMENT_SPACING * 2))
-        screen.blit(credits_button, center_coords(credits_button, -1, HEIGHT//2 + ELEMENT_SPACING * 3))
-        screen.blit(exit_button, center_coords(exit_button, -1, HEIGHT//2 + ELEMENT_SPACING * 4))
+        screen.blit(title_txt, center_coords(title_txt, -1, o.HEIGHT//5))
+        screen.blit(play_button, center_coords(play_button, -1, o.HEIGHT//2))
+        screen.blit(continue_button, center_coords(continue_button, -1, o.HEIGHT//2 + ELEMENT_SPACING))
+        screen.blit(options_button, center_coords(options_button, -1, o.HEIGHT//2 + ELEMENT_SPACING * 2))
+        screen.blit(credits_button, center_coords(credits_button, -1, o.HEIGHT//2 + ELEMENT_SPACING * 3))
+        screen.blit(exit_button, center_coords(exit_button, -1, o.HEIGHT//2 + ELEMENT_SPACING * 4))
 
 
     elif (layout is "STORY"):
@@ -192,17 +190,17 @@ while doGameLoop:
             isStartingFromContinue = False
             for i in range(continueStartPoint):
                 if line[:10] == "background": # Handle setting new background
-                    currentBgPath = "resources/bg/%s.png" % line[11:].strip()
+                    o.currentBgPath = "resources/bg/%s.png" % line[11:].strip()
                 elif line[:5] == "music": # Handle setting new tunes
                     if (line[6:].strip() == "OFF"):
                         isMusicPlaying = False
                     else:
-                        currentMusicPath = "resources/music/%s.mp3" % line[6:].strip()
+                        o.currentMusicPath = "resources/music/%s.mp3" % line[6:].strip()
                 line = f.readline()
             # Load new song
             if isMusicPlaying:
                 pygame.mixer.music.stop()
-                pygame.mixer.music.load(currentMusicPath)
+                pygame.mixer.music.load(o.currentMusicPath)
                 pygame.mixer.music.play(-1)
 
         # Now start reading the file line by line, parsing as we go.
@@ -224,7 +222,7 @@ while doGameLoop:
             elif line[:10] == "background": # Handle setting new background
                 temp = line[11:].strip()
                 if not temp == []: # Make sure it's not a blank line
-                    currentBgPath = "resources/bg/%s.png" % line[11:].strip()
+                    o.currentBgPath = "resources/bg/%s.png" % line[11:].strip()
                 line = f.readline()
                 lineIndex+=1
             elif line[:5] == "music": # Handle setting new tunes
@@ -233,11 +231,11 @@ while doGameLoop:
                     if line[6:].strip() == "OFF":
                         isMusicPlaying = False
                     else:
-                        currentMusicPath = "resources/music/%s.mp3" % line[6:].strip()
+                        o.currentMusicPath = "resources/music/%s.mp3" % line[6:].strip()
                         isMusicPlaying = True
                     if isMusicPlaying: # Load new song
                         pygame.mixer.music.stop()
-                        pygame.mixer.music.load(currentMusicPath)
+                        pygame.mixer.music.load(o.currentMusicPath)
                         pygame.mixer.music.play(-1)
                     else: # Turn off song if it was disabled.
                         pygame.mixer.music.stop()
@@ -246,7 +244,7 @@ while doGameLoop:
             elif line[:10] == "transition": # Handle transition commands
                 # If two transitions are listed together and one causes user to wait, then make it happen.
                 if inTransition:
-                    inTransitionBg = pygame.Surface((WIDTH, HEIGHT))
+                    inTransitionBg = pygame.Surface((o.WIDTH, o.HEIGHT))
                     inTransitionBg.fill(transitionBg)
                     screen.blit(inTransitionBg, (0, 0))
                 else:
@@ -280,17 +278,17 @@ while doGameLoop:
                     contentIndex+=1
 
                 if inTransition:
-                    inTransitionBg = pygame.Surface((WIDTH, HEIGHT))
+                    inTransitionBg = pygame.Surface((o.WIDTH, o.HEIGHT))
                     inTransitionBg.fill(transitionBg)
                     screen.blit(inTransitionBg, (0, 0))
                 else:
                     # Set background
-                    screen.blit(get_image(currentBgPath), (0, 0))
+                    screen.blit(get_image(o.currentBgPath), (0, 0))
 
                     # Set text box bg
-                    textbox = pygame.Surface((WIDTH, HEIGHT//2 - (HEIGHT//2)//6 - TEXT_BOX_GUTTER), pygame.SRCALPHA)
+                    textbox = pygame.Surface((o.WIDTH, o.HEIGHT//2 - (o.HEIGHT//2)//6 - TEXT_BOX_GUTTER), pygame.SRCALPHA)
                     textbox.fill(C_TEXT_BOX)
-                    screen.blit(textbox, (0, HEIGHT//2 + (HEIGHT//2)//6))
+                    screen.blit(textbox, (0, o.HEIGHT//2 + (o.HEIGHT//2)//6))
                     if line[:1] == ":": # Handle a narrative line
                         # Set text
                         wrappedText = wrap_text(line[1:].strip())
@@ -299,16 +297,16 @@ while doGameLoop:
                         if (isinstance(text, list)):
                             hOffset = 0
                             for t in text:
-                                screen.blit(t, (TEXT_MARGIN, HEIGHT//2 + (HEIGHT//2)//6 + TEXT_MARGIN*2 + hOffset))
+                                screen.blit(t, (TEXT_MARGIN, o.HEIGHT//2 + (o.HEIGHT//2)//6 + TEXT_MARGIN*2 + hOffset))
                                 hOffset += TEXT_FONT_SIZE
                         else:
-                            screen.blit(text, (TEXT_MARGIN, HEIGHT//2 + (HEIGHT//2)//6 + TEXT_MARGIN*2))
+                            screen.blit(text, (TEXT_MARGIN, o.HEIGHT//2 + (o.HEIGHT//2)//6 + TEXT_MARGIN*2))
                     else:
                         colonIndex = line.find(":")
 
                         # Set character name
                         title = print_text(line[:colonIndex].strip(), TITLE_FONT_SIZE, C_WHITE, True)
-                        screen.blit(title, (TEXT_MARGIN, HEIGHT//2 + (HEIGHT//2)//6 + TEXT_MARGIN))
+                        screen.blit(title, (TEXT_MARGIN, o.HEIGHT//2 + (o.HEIGHT//2)//6 + TEXT_MARGIN))
 
                         # Set text
                         wrappedText = wrap_text(line[colonIndex+1:].strip())
@@ -316,10 +314,10 @@ while doGameLoop:
                         if (isinstance(text, list)):
                             hOffset = 0
                             for t in text:
-                                screen.blit(t, (TEXT_MARGIN, HEIGHT//2 + (HEIGHT//2)//6 + TEXT_MARGIN*2 + title.get_height() + hOffset))
+                                screen.blit(t, (TEXT_MARGIN, o.HEIGHT//2 + (o.HEIGHT//2)//6 + TEXT_MARGIN*2 + title.get_height() + hOffset))
                                 hOffset += TEXT_FONT_SIZE
                         else:
-                            screen.blit(text, (TEXT_MARGIN, HEIGHT//2 + (HEIGHT//2)//6 + TEXT_MARGIN*2 + title.get_height()))
+                            screen.blit(text, (TEXT_MARGIN, o.HEIGHT//2 + (o.HEIGHT//2)//6 + TEXT_MARGIN*2 + title.get_height()))
 
 
     elif (layout is "CONTINUE"):
@@ -334,7 +332,7 @@ while doGameLoop:
         continue_txt = create_text(continue_raw, ELEMENT_FONT_SIZE, C_DARK_RED)
         hOffset = 0
         for t in continue_txt:
-            screen.blit(t, center_coords(t, -1, HEIGHT//5 + hOffset))
+            screen.blit(t, center_coords(t, -1, o.HEIGHT//5 + hOffset))
             hOffset += ELEMENT_FONT_SIZE
 
 
@@ -382,20 +380,20 @@ while doGameLoop:
                     continueSelected -= 1
 
         # Draw button background
-        textbox = pygame.Surface((WIDTH//2, ELEMENT_SPACING*2), pygame.SRCALPHA)
+        textbox = pygame.Surface((o.WIDTH//2, ELEMENT_SPACING*2), pygame.SRCALPHA)
         textbox.fill(C_TITLE_BOX)
-        screen.blit(textbox, (WIDTH//4, HEIGHT//2))
+        screen.blit(textbox, (o.WIDTH//4, o.HEIGHT//2))
 
         # Draw selector
-        selectorbox = pygame.Surface((WIDTH//2, ELEMENT_SPACING), pygame.SRCALPHA)
+        selectorbox = pygame.Surface((o.WIDTH//2, ELEMENT_SPACING), pygame.SRCALPHA)
         selectorbox.fill(C_SELECTOR_BOX)
-        screen.blit(selectorbox, (WIDTH//4, HEIGHT//2 + ELEMENT_SPACING * continueSelected))
+        screen.blit(selectorbox, (o.WIDTH//4, o.HEIGHT//2 + ELEMENT_SPACING * continueSelected))
 
         # Draw buttons
         continue_yes = create_bold_text("Yes", ELEMENT_FONT_SIZE, C_WHITE)
         continue_no = create_bold_text("No", ELEMENT_FONT_SIZE, C_WHITE)
-        screen.blit(continue_yes, center_coords(continue_yes, -1, HEIGHT//2))
-        screen.blit(continue_no, center_coords(continue_no, -1, HEIGHT//2 + ELEMENT_SPACING))
+        screen.blit(continue_yes, center_coords(continue_yes, -1, o.HEIGHT//2))
+        screen.blit(continue_no, center_coords(continue_no, -1, o.HEIGHT//2 + ELEMENT_SPACING))
 
     elif (layout is "OPTIONS"):
         for event in pygame.event.get():
@@ -436,7 +434,7 @@ while doGameLoop:
         screen.blit(get_image('resources/bg/title_bg.png'), (0, 000))
         text = create_text(cover_credits, CREDIT_FONT_SIZE, C_WHITE)
         if (isinstance(text, list)):
-            hOffset = HEIGHT//2
+            hOffset = o.HEIGHT//2
             for t in text:
                 screen.blit(t, center_coords(t, 25, hOffset))
                 hOffset += CREDIT_FONT_SIZE
