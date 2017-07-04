@@ -1,31 +1,35 @@
-background: z1
-music: game
+$background forest
+$music game
 
-: First narration line.
-: Second narration line.
-Person: This is one person.
-Character: This is another character.
-: Now the scene and music will switch.
+: Narration line over forest and Clannad music.
+Josh: Character line with really long speech that drones on and wraps around the rectangular dialogue box.
 
-transition: fadetoandfrom white 3
+Background: switch to mountains
+$background mountains
 
-background: z2
-music: game2
+Music: pause music
+$music PAUSE
 
-Character: Eventually we’ll have faces.
-Person: Or even whole bodies.
+Music: restart music
+$music UNPAUSE
 
-: Now the music will stop.
+Music: turn music off
+$music OFF
 
-music: OFF
+Music: turn music on
+$music game
 
-:...Now the background will white out.
+Music: switch to electronic
+$music electronic
 
-background: white
+//Transition: fade to black
+//$transition fadeto black
 
-:...
+//Transition: fade from white
+//$transition fadefrom white
 
-background: z1
-music: game
+//Transition: fade to from red
+//$transition fadetofrom red
 
-:Now back to the first scene.
+:Now pause at this point and reload save.
+:Background: mountains. Music: electronic

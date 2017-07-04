@@ -1,7 +1,10 @@
-title: Test Project
+title: Clannad Music and City BG
 menu song: menu
 menu image: title_bg
 
 credits:
-Written by Joshua Koh
-Music by people :D
+Credits here.
+More credits.
+
+
+Way more credits.
