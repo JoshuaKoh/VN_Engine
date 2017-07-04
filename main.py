@@ -189,13 +189,15 @@ while doGameLoop:
         if isStartingFromContinue:
             isStartingFromContinue = False
             for i in range(continueStartPoint):
-                if line[:10] == "background": # Handle setting new background
-                    o.currentBgPath = "resources/bg/%s.png" % line[11:].strip()
-                elif line[:5] == "music": # Handle setting new tunes
-                    if (line[6:].strip() == "OFF"):
+                if line[:11] == "$background": # Handle setting new background
+                    o.currentBgPath = "resources/bg/%s.png" % line[12:].strip()
+                elif line[:6] == "$music": # Handle setting new tunes
+                    command = line[7:].strip()
+                    if (command == "OFF"):
                         isMusicPlaying = False
                     else:
-                        o.currentMusicPath = "resources/music/%s.mp3" % line[6:].strip()
+                        isMusicPlaying = True
+                        o.currentMusicPath = "resources/music/%s.mp3" % command
                 line = f.readline()
             # Load new song
             if isMusicPlaying:
@@ -216,39 +218,44 @@ while doGameLoop:
             with open('_meta.json', 'w') as metaFile:
                 metaFile.write(json.dumps(meta))
         else:
-            if line == "\n": # If it's a blank line, skip to the next one.
+            if line == "\n" or line[:2] == "//": # If it's a blank line or comment, skip to the next one.
                 line = f.readline()
                 lineIndex+=1
-            elif line[:10] == "background": # Handle setting new background
-                temp = line[11:].strip()
+            elif line[:11] == "$background": # Handle setting new background
+                temp = line[12:].strip()
                 if not temp == []: # Make sure it's not a blank line
-                    o.currentBgPath = "resources/bg/%s.png" % line[11:].strip()
+                    o.currentBgPath = "resources/bg/%s.png" % line[12:].strip()
                 line = f.readline()
                 lineIndex+=1
-            elif line[:5] == "music": # Handle setting new tunes
-                temp = line[6:].strip()
+            elif line[:6] == "$music": # Handle setting new tunes
+                command = line[7:].strip()
+                print("'%s' '%s'" % (command, isMusicPlaying))
                 if not temp == []: # Make sure it's not a blank line
-                    if line[6:].strip() == "OFF":
+                    if command == "OFF":
                         isMusicPlaying = False
-                    else:
-                        o.currentMusicPath = "resources/music/%s.mp3" % line[6:].strip()
+                        pygame.mixer.music.stop()
+                    elif (command == "PAUSE" and isMusicPlaying is True):
+                        isMusicPlaying = False
+                        pygame.mixer.music.pause()
+                    elif (command == "UNPAUSE" and isMusicPlaying is False):
                         isMusicPlaying = True
-                    if isMusicPlaying: # Load new song
+                        pygame.mixer.music.unpause()
+                    else:
+                        o.currentMusicPath = "resources/music/%s.mp3" % line[7:].strip()
+                        isMusicPlaying = True
                         pygame.mixer.music.stop()
                         pygame.mixer.music.load(o.currentMusicPath)
                         pygame.mixer.music.play(-1)
-                    else: # Turn off song if it was disabled.
-                        pygame.mixer.music.stop()
                 line = f.readline()
                 lineIndex+=1
-            elif line[:10] == "transition": # Handle transition commands
+            elif line[:11] == "$transition": # Handle transition commands
                 # If two transitions are listed together and one causes user to wait, then make it happen.
                 if inTransition:
                     inTransitionBg = pygame.Surface((o.WIDTH, o.HEIGHT))
                     inTransitionBg.fill(transitionBg)
                     screen.blit(inTransitionBg, (0, 0))
                 else:
-                    temp = line[11:].strip().split()
+                    temp = line[12:].strip().split()
                     if not temp == []: # Make sure it's not a blank line
                         if temp[0] == "fadeto":
                             inTransition = True # This needs to be run before calling the transition function
